@@ -142,6 +142,29 @@ describe('EventController', () => {
     }])
   })
 
+  it('should return event by id', async () => {
+    const { sut, eventServiceStub } = makeSut()
+    jest.spyOn(eventServiceStub, 'getEvent').mockReturnValueOnce(new Promise(resolve => resolve({
+      id: 'any_id',
+      title: 'any_title',
+      description: 'any_description',
+      date: 'any_date'
+    })))
+    const httpRequest = {
+      params: {
+        id: 'any_id'
+      }
+    }
+    const httpResponse = await sut.getEvent(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      title: 'any_title',
+      description: 'any_description',
+      date: 'any_date'
+    })
+  })
+
   it('should return 200 and updated event', async () => {
     const { sut, eventServiceStub } = makeSut()
     jest.spyOn(eventServiceStub, 'updateEvent').mockReturnValueOnce(new Promise(resolve => resolve({

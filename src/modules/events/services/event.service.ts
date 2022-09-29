@@ -17,6 +17,14 @@ export class EventService {
     return events
   }
 
+  async getEvent (id: string): Promise<any> {
+    const event = await this.eventRepository.findEventById(id)
+    if (!event) {
+      throw new Error('Event not found')
+    }
+    return event
+  }
+
   async updateEvent (event: any): Promise<any> {
     const eventAlreadyExists = await this.eventRepository.findByTitle(event.title)
     if (!eventAlreadyExists) {

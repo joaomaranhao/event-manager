@@ -44,6 +44,22 @@ export class EventController {
     }
   }
 
+  async getEvent (httpRequest: HttpRequest): Promise<any> {
+    try {
+      const { id } = httpRequest.params
+      const event = await this.eventService.getEvent(id)
+      return {
+        statusCode: 200,
+        body: event
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: new Error('Internal server error')
+      }
+    }
+  }
+
   async update (httpRequest: HttpRequest): Promise<any> {
     try {
       const requiredFields = ['title', 'description', 'date']
