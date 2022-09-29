@@ -1,8 +1,8 @@
 export interface EventRepository {
-  createEvent(event: Event): Promise<Event>
-  findByTitle(title: string): Promise<Event | null>
-  findEvents(): Promise<Event[]>
-  findEventById(id: string): Promise<Event | null>
-  updateEvent(id: string, event: Event): Promise<Event>
+  createEvent(event: any): Promise<any>
+  findByTitle(title: string): Promise<any | null>
+  findEvents(): Promise<any[]>
+  findEventById(id: string): Promise<any | null>
+  updateEvent(id: string, event: any): Promise<Event>
   deleteEvent(id: string): Promise<void>
 }

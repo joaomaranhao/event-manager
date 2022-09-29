@@ -141,4 +141,30 @@ describe('EventController', () => {
       date: 'any_date'
     }])
   })
+
+  it('should return 200 and updated event', async () => {
+    const { sut, eventServiceStub } = makeSut()
+    jest.spyOn(eventServiceStub, 'updateEvent').mockReturnValueOnce(new Promise(resolve => resolve({
+      id: 'any_id',
+      title: 'new_title',
+      description: 'new_description',
+      date: 'new_date'
+    })))
+    const httpRequest = {
+      body: {
+        id: 'any_id',
+        title: 'any_title',
+        description: 'any_description',
+        date: 'any_date'
+      }
+    }
+    const httpResponse = await sut.update(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      title: 'new_title',
+      description: 'new_description',
+      date: 'new_date'
+    })
+  })
 })

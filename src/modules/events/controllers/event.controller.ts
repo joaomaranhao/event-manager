@@ -43,4 +43,29 @@ export class EventController {
       }
     }
   }
+
+  async update (httpRequest: HttpRequest): Promise<any> {
+    try {
+      const requiredFields = ['title', 'description', 'date']
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field]) {
+          return {
+            statusCode: 400,
+            body: new Error(`Missing param: ${field}`)
+          }
+        }
+      }
+      const { title, description, date } = httpRequest.body
+      const event = await this.eventService.updateEvent({ title, description, date })
+      return {
+        statusCode: 200,
+        body: event
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: new Error('Internal server error')
+      }
+    }
+  }
 }
