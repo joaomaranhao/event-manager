@@ -1,10 +1,11 @@
 import { EmailValidator } from '../../../interfaces/emailValidator'
 import { HttpRequest } from '../../../interfaces/http'
+import { SignUpService } from '../services/signup.service'
 
 export class SignUpController {
   constructor (
     private emailValidator: EmailValidator,
-    private signUpService: any
+    private signUpService: SignUpService
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<any> {
@@ -33,20 +34,20 @@ export class SignUpController {
         }
       }
 
-      const user = await this.signUpService.execute({ name, email, password })
+      const user = await this.signUpService.execute(name, email, password)
 
-      return {
-        statusCode: 201,
-        body: user
-      }
-    } catch (error: any) {
-      if (error.message === 'Email already in use') {
+      if (user) {
+        return {
+          statusCode: 201,
+          body: user
+        }
+      } else {
         return {
           statusCode: 403,
-          body: error
+          body: new Error('Email already in use')
         }
       }
-
+    } catch (error) {
       return {
         statusCode: 500,
         body: new Error('Internal server error')

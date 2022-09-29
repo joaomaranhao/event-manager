@@ -11,7 +11,7 @@ export class SignUpService {
     const hashedPassword = await this.signUpRepository.hashPassword(password)
 
     const newUser = await this.signUpRepository.createUser(name, email, hashedPassword)
-    Object.assign(newUser, { password: undefined })
-    return new Promise((resolve, reject) => resolve(newUser))
+    const { id, name: userName, email: userEmail } = newUser
+    return { id, name: userName, email: userEmail }
   }
 }
