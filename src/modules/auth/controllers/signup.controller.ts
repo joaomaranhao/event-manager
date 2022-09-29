@@ -9,5 +9,13 @@ export class SignUpController {
         }
       }
     }
+
+    const { password, passwordConfirmation } = httpRequest.body
+    if (password !== passwordConfirmation) {
+      return {
+        statusCode: 400,
+        body: new Error('Invalid param: passwordConfirmation')
+      }
+    }
   }
 }
