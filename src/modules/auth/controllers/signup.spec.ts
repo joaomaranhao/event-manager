@@ -1,0 +1,27 @@
+import { SignUpController } from './signup.controller'
+
+type SutTypes = {
+  sut: SignUpController
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new SignUpController()
+  return {
+    sut
+  }
+}
+
+describe('SignUpController', () => {
+  it('should return 400 if no name is provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+})
