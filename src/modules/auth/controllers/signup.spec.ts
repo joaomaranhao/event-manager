@@ -1,8 +1,8 @@
 import { SignUpController } from './signup.controller'
 
 class EmailValidatorStub {
-  isValid (email: string): boolean {
-    return true
+  isValid (email: string): Promise<boolean> {
+    return new Promise(resolve => resolve(true))
   }
 }
 
@@ -94,7 +94,7 @@ describe('SignUpController', () => {
 
   it('should return 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
-    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(new Promise(resolve => resolve(false)))
     const httpRequest = {
       body: {
         name: 'any_name',
