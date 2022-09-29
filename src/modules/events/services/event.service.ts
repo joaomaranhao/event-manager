@@ -11,4 +11,9 @@ export class EventService {
     const newEvent = await this.eventRepository.createEvent(event)
     return newEvent
   }
+
+  async getEvents (): Promise<any> {
+    const events = await this.eventRepository.findEvents()
+    return events
+  }
 }

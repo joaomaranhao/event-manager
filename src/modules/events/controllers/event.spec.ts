@@ -120,4 +120,25 @@ describe('EventController', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new Error('Internal server error'))
   })
+
+  it('should return all events', async () => {
+    const { sut, eventServiceStub } = makeSut()
+    jest.spyOn(eventServiceStub, 'getEvents').mockReturnValueOnce(new Promise(resolve => resolve([{
+      id: 'any_id',
+      title: 'any_title',
+      description: 'any_description',
+      date: 'any_date'
+    }])))
+    const httpRequest = {
+      body: {}
+    }
+    const httpResponse = await sut.getEvents(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual([{
+      id: 'any_id',
+      title: 'any_title',
+      description: 'any_description',
+      date: 'any_date'
+    }])
+  })
 })

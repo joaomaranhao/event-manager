@@ -28,4 +28,19 @@ export class EventController {
       }
     }
   }
+
+  async getEvents (httpRequest: HttpRequest): Promise<any> {
+    try {
+      const events = await this.eventService.getEvents()
+      return {
+        statusCode: 200,
+        body: events
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: new Error('Internal server error')
+      }
+    }
+  }
 }
