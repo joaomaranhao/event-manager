@@ -84,4 +84,20 @@ export class EventController {
       }
     }
   }
+
+  async delete (httpRequest: HttpRequest): Promise<any> {
+    try {
+      const { id } = httpRequest.params
+      await this.eventService.deleteEvent(id)
+      return {
+        statusCode: 200,
+        body: null
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: new Error('Internal server error')
+      }
+    }
+  }
 }

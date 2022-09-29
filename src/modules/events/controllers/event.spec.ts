@@ -190,4 +190,17 @@ describe('EventController', () => {
       date: 'new_date'
     })
   })
+
+  it('should return 200 and deleted event', async () => {
+    const { sut, eventServiceStub } = makeSut()
+    jest.spyOn(eventServiceStub, 'deleteEvent').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    const httpRequest = {
+      params: {
+        id: 'any_id'
+      }
+    }
+    const httpResponse = await sut.delete(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual(null)
+  })
 })

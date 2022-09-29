@@ -34,4 +34,12 @@ export class EventService {
     const updatedEvent = await this.eventRepository.updateEvent(id, event)
     return updatedEvent
   }
+
+  async deleteEvent (id: string): Promise<void> {
+    const eventExists = await this.eventRepository.findEventById(id)
+    if (!eventExists) {
+      throw new Error('Event does not exists')
+    }
+    await this.eventRepository.deleteEvent(id)
+  }
 }
