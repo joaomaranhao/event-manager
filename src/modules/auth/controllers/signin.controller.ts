@@ -16,5 +16,24 @@ export class SignInController {
           }
         }
       }
+      const { email, password } = httpRequest.body
+
+      const credentials = await this.signInService.execute(email, password)
+
+      if (credentials) {
+        const { accessToken, refreshToken } = credentials
+        return {
+          statusCode: 200,
+          body: {
+            accessToken,
+            refreshToken
+          }
+        }
+      } else {
+        return {
+          statusCode: 401,
+          body: new Error('Unauthorized')
+        }
+      }
     }
   }
