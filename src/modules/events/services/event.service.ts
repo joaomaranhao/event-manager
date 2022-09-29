@@ -26,11 +26,11 @@ export class EventService {
   }
 
   async updateEvent (event: any): Promise<any> {
-    const eventAlreadyExists = await this.eventRepository.findByTitle(event.title)
-    if (!eventAlreadyExists) {
+    const eventExists = await this.eventRepository.findEventById(event.id)
+    if (!eventExists) {
       throw new Error('Event does not exists')
     }
-    const { id } = eventAlreadyExists
+    const { id } = eventExists
     const updatedEvent = await this.eventRepository.updateEvent(id, event)
     return updatedEvent
   }
