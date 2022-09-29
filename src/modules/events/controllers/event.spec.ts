@@ -60,7 +60,7 @@ describe('EventController', () => {
         date: 'any_date'
       }
     }
-    const httpResponse = await sut.handle(httpRequest)
+    const httpResponse = await sut.create(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new Error('Missing param: title'))
   })
@@ -73,7 +73,7 @@ describe('EventController', () => {
         date: 'any_date'
       }
     }
-    const httpResponse = await sut.handle(httpRequest)
+    const httpResponse = await sut.create(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new Error('Missing param: description'))
   })
@@ -86,8 +86,38 @@ describe('EventController', () => {
         description: 'any_description'
       }
     }
-    const httpResponse = await sut.handle(httpRequest)
+    const httpResponse = await sut.create(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new Error('Missing param: date'))
+  })
+
+  it('should call EventService with correct values', async () => {
+    const { sut, eventServiceStub } = makeSut()
+    const httpRequest = {
+      body: {
+        title: 'any_title',
+        description: 'any_description',
+        date: 'any_date'
+      }
+    }
+    await sut.create(httpRequest)
+    expect(eventServiceStub.createEvent).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  it('should return 500 if EventService throws', async () => {
+    const { sut, eventServiceStub } = makeSut()
+    jest.spyOn(eventServiceStub, 'createEvent').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpRequest = {
+      body: {
+        title: 'any_title',
+        description: 'any_description',
+        date: 'any_date'
+      }
+    }
+    const httpResponse = await sut.create(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new Error('Internal server error'))
   })
 })
