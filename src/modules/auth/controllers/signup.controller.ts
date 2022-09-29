@@ -33,8 +33,20 @@ export class SignUpController {
         }
       }
 
-      return await this.signUpService.execute({ name, email, password })
-    } catch (error) {
+      const user = await this.signUpService.execute({ name, email, password })
+
+      return {
+        statusCode: 201,
+        body: user
+      }
+    } catch (error: any) {
+      if (error.message === 'Email already in use') {
+        return {
+          statusCode: 403,
+          body: error
+        }
+      }
+
       return {
         statusCode: 500,
         body: new Error('Internal server error')
