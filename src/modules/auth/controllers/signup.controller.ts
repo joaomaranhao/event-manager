@@ -1,5 +1,7 @@
+import { EmailValidator } from '../../../interfaces/emailValidator'
+
 export class SignUpController {
-  constructor (private emailValidator: any) {}
+  constructor (private emailValidator: EmailValidator) {}
 
   async handle (httpRequest: any): Promise<any> {
     const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
