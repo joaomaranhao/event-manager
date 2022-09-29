@@ -1,3 +1,5 @@
+import { SignUpRepository } from '../interfaces/signup.repository'
+import { SignUpService } from '../services/signup.service'
 import { SignUpController } from './signup.controller'
 
 class EmailValidatorStub {
@@ -6,7 +8,25 @@ class EmailValidatorStub {
   }
 }
 
-class SignUpServiceStub {
+class SignUpRepositoryStub implements SignUpRepository {
+  async findUserByEmail (email: string): Promise<any> {
+    return new Promise(resolve => resolve(null))
+  }
+
+  async hashPassword (password: string): Promise<string> {
+    return new Promise(resolve => resolve('hashed_password'))
+  }
+
+  async createUser (name: string, email: string, password: string): Promise<any> {
+    return new Promise(resolve => resolve({
+      id: 'any_id',
+      name: 'any_name',
+      email: 'any_email'
+    }))
+  }
+}
+
+class SignUpServiceStub extends SignUpService {
   async execute (name: string, email: string, password: string): Promise<void> {
     return new Promise(resolve => resolve())
   }
@@ -19,8 +39,9 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const signUpServiceStub = new SignUpServiceStub()
   const emailValidatorStub = new EmailValidatorStub()
+  const signUpRepositoryStub = new SignUpRepositoryStub()
+  const signUpServiceStub = new SignUpServiceStub(signUpRepositoryStub)
   const sut = new SignUpController(emailValidatorStub, signUpServiceStub)
   return {
     sut,
@@ -160,10 +181,6 @@ describe('SignUpController', () => {
       }
     }
     await sut.handle(httpRequest)
-    expect(executeSpy).toHaveBeenCalledWith({
-      name: 'valid_name',
-      email: 'valid_mail@mail.com',
-      password: 'valid_password'
-    })
+    expect(executeSpy).toHaveBeenCalledWith('valid_name', 'valid_mail@mail.com', 'valid_password')
   })
 })
